@@ -15,3 +15,4 @@ var game = new WordleGame(driver);
 Thread.Sleep(2000);
 game.ClosePrompt();
 game.Keyboard.Type("Audio", TimeSpan.FromSeconds(1));
+Thread.Sleep(1000);

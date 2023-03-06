@@ -20,14 +20,13 @@ public class Keyboard
         var keyboardMap = KeyboardKey.MapCharToKey(KeyboardRow.GetAllKeysFromKeyboard(this));
         for (var i = 0; i < chars.Length; i++)
         {
-            Task.Delay(delayBetweenInput).Wait();
-
             var c = char.ToUpper(chars[i]);
             Debug.Assert(keyboardMap.ContainsKey(c));
             keyboardMap[c].Click();
+            Task.Delay(delayBetweenInput).Wait();
         }
-
-        Task.Delay(delayBetweenInput).Wait();
+        
         keyboardMap[(char)1].Click(); // Enter
+        Task.Delay(TimeSpan.FromSeconds(2.5)).Wait(); // Wait for tiles to finish flipping
     }
 }

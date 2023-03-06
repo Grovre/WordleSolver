@@ -9,6 +9,7 @@ public class GameBoardRow
     public IEnumerable<GameBoardLetterTile> LetterTiles { get; }
     private string? _word;
     public string Word => _word ??= string.Concat(LetterTiles);
+    public bool HasWord => !string.IsNullOrWhiteSpace(Word);
 
     public GameBoardRow(IWebElement row)
     {
