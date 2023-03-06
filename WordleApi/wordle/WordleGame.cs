@@ -2,26 +2,24 @@
 using System.Text.Json.Nodes;
 using OpenQA.Selenium;
 using WordleApi.helpers;
+using WordleApi.Interfaces;
 using WordleApi.wordle.elements.gameboard;
 using WordleApi.wordle.elements.keyboard;
 
 namespace WordleApi.wordle;
 
-public class WordleGame
+public class WordleGame : IRefreshable
 {
     public IWebDriver Driver { get; }
-    public GameBoard Board { get; }
-    public Keyboard Keyboard { get; }
+    public GameBoard Board { get; private set; }
+    public Keyboard Keyboard { get; private set; }
 
     public WordleGame(IWebDriver driver, string url = NyTimesWordleXPaths.Url)
     {
         driver.Url = url;
         driver.Navigate().GoToUrl(url);
         Driver = driver;
-        var boardEl = driver.FindElement(By.XPath(NyTimesWordleXPaths.Board));
-        var keyboardEl = driver.FindElement(By.XPath(NyTimesWordleXPaths.Keyboard));
-        Board = new GameBoard(boardEl);
-        Keyboard = new Keyboard(keyboardEl);
+        Refresh();
     }
 
     public void ClosePrompt()
@@ -43,5 +41,13 @@ public class WordleGame
             .ToArray();
         words.AsSpan().Shuffle(Random.Shared); // Avoid ordered words
         return words;
+    }
+
+    public void Refresh()
+    {
+        var boardEl = Driver.FindElement(By.XPath(NyTimesWordleXPaths.Board));
+        var keyboardEl = Driver.FindElement(By.XPath(NyTimesWordleXPaths.Keyboard));
+        Board = new GameBoard(boardEl);
+        Keyboard = new Keyboard(keyboardEl);
     }
 }
